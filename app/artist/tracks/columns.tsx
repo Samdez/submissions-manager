@@ -5,12 +5,9 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export type Track = {
+type Track = {
   id: string;
   title: string;
-  status: "pending" | "accepted" | "rejected";
-  album: string;
-  albumId: string;
 };
 
 export const columns: ColumnDef<Track>[] = [
@@ -18,7 +15,7 @@ export const columns: ColumnDef<Track>[] = [
     accessorKey: "title",
     header: "Title",
     cell: ({ row }) => (
-      <Link href={`/artist/submissions/${row.original.id}`}>
+      <Link href={`/artist/tracks/${row.original.id}`}>
         <div className="w-full">{row.original.title}</div>
       </Link>
     ),

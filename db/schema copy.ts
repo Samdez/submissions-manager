@@ -1,14 +1,13 @@
 import { relations } from "drizzle-orm";
 import {
-  serial,
   text,
   integer,
+  sqliteTable,
   primaryKey,
-  pgTable,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/sqlite-core";
 
-export const tracks = pgTable("tracks", {
-  id: serial("id").primaryKey(),
+export const tracks = sqliteTable("tracks", {
+  id: integer("id").primaryKey(),
   title: text("title").notNull(),
   url: text("url").notNull(),
   albumId: integer("album_id"),
@@ -24,16 +23,17 @@ export const tracksRelations = relations(tracks, ({ one }) => ({
   }),
 }));
 
-export const albums = pgTable("albums", {
-  id: serial("id").primaryKey(),
+export const albums = sqliteTable("albums", {
+  id: integer("id"),
   title: text("title").notNull(),
+  imageUrl: text("image_url"),
 });
 export const albumssRelations = relations(albums, ({ many }) => ({
   tracks: many(tracks),
 }));
 
-export const artists = pgTable("artists", {
-  id: serial("id").primaryKey(),
+export const artists = sqliteTable("artists", {
+  id: integer("id"),
   name: text("name").notNull(),
 });
 
@@ -41,7 +41,7 @@ export const artistsRelations = relations(artists, ({ many }) => ({
   artistsToAlbums: many(artistsToAlbums),
 }));
 
-export const artistsToAlbums = pgTable(
+export const artistsToAlbums = sqliteTable(
   "artists_to_albums",
   {
     artistId: integer("artist_id")
