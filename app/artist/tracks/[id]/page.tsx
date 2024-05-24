@@ -1,5 +1,6 @@
 import { getTrack } from "@/prisma/queries";
 import { notFound } from "next/navigation";
+import { Download } from "lucide-react";
 
 async function TrackPage({ params }: { params: { id: string } }) {
   const track = await getTrack(+params.id, "ALL");
@@ -13,6 +14,9 @@ async function TrackPage({ params }: { params: { id: string } }) {
       <p>Album: {track?.album?.title ?? "No album found for this track"}</p>
       <p>Status: {track?.status}</p>
       <audio controls src={track?.url} />
+      <a href={track.url} download>
+        <Download />
+      </a>
       {track?.Comments.map((comment) => (
         <div key={comment.id} className="w-full">
           <div className="flex justify-between">
