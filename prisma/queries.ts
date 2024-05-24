@@ -6,10 +6,16 @@ export async function getTracks() {
   return tracks;
 }
 
-export async function getTrack(trackId: number) {
+export async function getTrack(
+  trackId: number,
+  visibility: "ALL" | "LABEL_MEMBERS",
+) {
   const track = await prisma.track.findFirst({
     where: { id: trackId },
-    include: { album: true },
+    include: {
+      album: true,
+      Comments: { include: { author: true }, where: { visibility } },
+    },
   });
   return track;
 }

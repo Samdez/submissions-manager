@@ -22,6 +22,12 @@ model Artist {
   tracks Track[]
 }
 
+model LabelMember {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Comment Comment[]
+}
+
 model Track {
   id             Int         @id @default(autoincrement())
   title          String
@@ -32,10 +38,27 @@ model Track {
   Artist         Artist?     @relation(fields: [artistId], references: [id])
   artistId       Int?
   submissionDate String
+  Comments       Comment[]
+}
+
+model Comment {
+  id            Int         @id @default(autoincrement())
+  text          String
+  author        LabelMember @relation(fields: [labelMemberId], references: [id])
+  date          String
+  labelMemberId Int
+  track         Track       @relation(fields: [trackId], references: [id])
+  trackId       Int
+  visibility    Visibility
 }
 
 enum TrackStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+enum Visibility {
+  ALL
+  LABEL_MEMBERS
 }
