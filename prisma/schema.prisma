@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Album {
+  id        Int      @id @default(autoincrement())
+  title     String
+  image_url String?
+  tracks    Track[]
+  artists   Artist[]
+}
+
+model Artist {
+  id     Int     @id @default(autoincrement())
+  name   String
+  albums Album[]
+  tracks Track[]
+}
+
+model Track {
+  id             Int         @id @default(autoincrement())
+  title          String
+  url            String
+  album          Album?      @relation(fields: [albumId], references: [id])
+  status         TrackStatus @default(PENDING)
+  albumId        Int?
+  Artist         Artist?     @relation(fields: [artistId], references: [id])
+  artistId       Int?
+  submissionDate String
+}
+
+enum TrackStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}

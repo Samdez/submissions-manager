@@ -1,4 +1,4 @@
-import { insertTrack } from "@/db/queries";
+import { insertTrack } from "@/prisma/queries";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -17,7 +17,11 @@ export const ourFileRouter = {
       throw new UploadThingError(`Error uploading track: ${err.error.message}`);
     })
     .onUploadComplete(async ({ file }) => {
-      insertTrack({ title: file.name, url: file.url });
+      insertTrack({
+        title: file.name,
+        url: file.url,
+        submissionDate: new Date().toUTCString(),
+      });
       console.log("Track uploaded successfully: ", file.url);
     }),
 } satisfies FileRouter;

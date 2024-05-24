@@ -1,27 +1,34 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Album, Track } from "@prisma/client";
 
-type Track = {
-  id: string;
-  title: string;
-};
+type TrackInput = Track & { album: Album | null };
+const columnHelper = createColumnHelper<TrackInput>();
 
-export const columns: ColumnDef<Track>[] = [
-  {
-    accessorKey: "title",
-    header: "Title",
+export const columns = [
+  columnHelper.accessor("title", {
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="px-0"
+        >
+          Title <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <Link href={`/artist/tracks/${row.original.id}`}>
         <div className="w-full">{row.original.title}</div>
       </Link>
     ),
-  },
-  {
-    accessorKey: "status",
+  }),
+  columnHelper.accessor("status", {
     header: ({ column }) => {
       return (
         <Button
@@ -33,9 +40,8 @@ export const columns: ColumnDef<Track>[] = [
         </Button>
       );
     },
-  },
-  {
-    accessorKey: "album",
+  }),
+  columnHelper.accessor("album.title", {
     header: ({ column }) => {
       return (
         <Button
@@ -47,17 +53,15 @@ export const columns: ColumnDef<Track>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <Link href={`artist/albums/${row.original.albumId}`}>
-        <div className="w-full">
-          toot
-          {row.original.album}
-        </div>
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "date",
+    cell: ({ row }) => {
+      row.original.album ? (
+        <Link href={`artist/albums/${row.original.album.title}`}>
+          <div className="w-full">{row.original.album.title}</div>
+        </Link>
+      ) : null;
+    },
+  }),
+  columnHelper.accessor("submissionDate", {
     header: ({ column }) => {
       return (
         <Button
@@ -69,5 +73,5 @@ export const columns: ColumnDef<Track>[] = [
         </Button>
       );
     },
-  },
+  }),
 ];
