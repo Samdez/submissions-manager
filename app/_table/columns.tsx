@@ -23,7 +23,7 @@ export const columns = [
       );
     },
     cell: ({ row }) => (
-      <Link href={`/artist/tracks/${row.original.id}`}>
+      <Link href={`/tracks/${row.original.id}`}>
         <div className="w-full">{row.original.title}</div>
       </Link>
     ),
@@ -42,6 +42,7 @@ export const columns = [
     },
   }),
   columnHelper.accessor("album.title", {
+    id: "albumTitle",
     header: ({ column }) => {
       return (
         <Button
@@ -54,7 +55,7 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      row.original.album ? (
+      return row.original.album ? (
         <Link href={`artist/albums/${row.original.album.title}`}>
           <div className="w-full">{row.original.album.title}</div>
         </Link>
