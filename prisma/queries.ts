@@ -1,8 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "./client";
 
-export async function getTracks() {
-  const tracks = await prisma.track.findMany({ include: { album: true } });
+export async function getTracks(userId: string) {
+  const tracks = await prisma.track.findMany({
+    include: { album: true },
+    where: { Artist: { clerkId: userId } },
+  });
   return tracks;
 }
 
@@ -23,4 +26,23 @@ export async function getTrack(
 export async function insertTrack(trackData: Prisma.TrackCreateInput) {
   const createdTrack = await prisma.track.create({ data: trackData });
   return createdTrack;
+}
+
+export async function createUser({
+  clerkId,
+  email,
+  firstName,
+  lastName,
+  userName,
+}: {
+  clerkId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
+}) {
+  const createdUser = await prisma.artist.create({
+    data: { clerkId, email, firstName, lastName, userName },
+  });
+  return createdUser;
 }
