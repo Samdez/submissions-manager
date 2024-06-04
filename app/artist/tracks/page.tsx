@@ -1,4 +1,4 @@
-import { getTracks } from "@/prisma/queries";
+import { getTracksByArtist } from "@/prisma/queries/track";
 import { columns } from "../../_table/columns";
 import { DataTable } from "../../components/data-table";
 import { auth } from "@clerk/nextjs/server";
@@ -7,7 +7,8 @@ async function SubmissionsPage() {
   const { userId } = auth();
   if (!userId) throw new Error("User cannot be identified");
 
-  const tracks = await getTracks(userId);
+  const tracks = await getTracksByArtist(userId);
+  console.log("🚀 ~ SubmissionsPage ~ tracks:", tracks);
 
   return (
     <div className="container mx-auto py-10">

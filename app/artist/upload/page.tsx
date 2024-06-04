@@ -1,23 +1,18 @@
-"use client";
-import { UploadDropzone } from "@/utils/uploadthings";
-import { useRouter } from "next/navigation";
+import { getArtist } from "@/prisma/queries/artist";
+import UploadComponent from "./UploadComponent";
+import { auth } from "@clerk/nextjs/server";
+import { getLabels } from "@/prisma/queries/label";
 
-function UploadPage() {
-  const router = useRouter();
+async function UploadPage() {
+  const { userId } = auth();
+  if (!userId) throw new Error("Error authenticating user");
+
+  const artist = await getArtist(userId);
+  const labels = await getLabels();
+
   return (
     <div className="flex items-center justify-center p-24">
-      <UploadDropzone
-        endpoint="trackUploader"
-        className="cursor-pointer"
-        appearance={{
-          container: "border-indigo-700",
-          label: "text-indigo-700",
-          button: "bg-indigo-700",
-        }}
-        onClientUploadComplete={(res) => {
-          router.push("tracks");
-        }}
-      />
+      <UploadComponent labels={labels} />
     </div>
   );
 }

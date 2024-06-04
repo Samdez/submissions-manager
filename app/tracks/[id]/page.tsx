@@ -1,6 +1,6 @@
-import { getTrack } from "@/prisma/queries";
 import { notFound } from "next/navigation";
 import { Download } from "lucide-react";
+import { getTrack } from "@/prisma/queries/track";
 
 async function TrackPage({ params }: { params: { id: string } }) {
   const track = await getTrack(+params.id, "ALL");
@@ -20,7 +20,7 @@ async function TrackPage({ params }: { params: { id: string } }) {
       {track?.Comments.map((comment) => (
         <div key={comment.id} className="w-full">
           <div className="flex justify-between">
-            <span>{comment.author.name}</span>
+            <span>{comment.author.userName}</span>
             <span>{comment.date}</span>
           </div>
           <div className="w-full rounded-xl bg-indigo-700 px-4 py-2 text-white">

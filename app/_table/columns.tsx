@@ -4,9 +4,9 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Album, Track } from "@prisma/client";
+import { Album, Label, Track } from "@prisma/client";
 
-type TrackInput = Track & { album: Album | null };
+type TrackInput = Track & { Album: Album | null; Labels: Label[] };
 const columnHelper = createColumnHelper<TrackInput>();
 
 export const columns = [
@@ -28,6 +28,28 @@ export const columns = [
       </Link>
     ),
   }),
+  columnHelper.accessor("Labels.name", {
+    id: "labelName",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="px-0"
+        >
+          Label <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="w-full">
+        {row.original.Labels.map(
+          (label, i) =>
+            `${label.name} ${i < row.original.Labels.length - 1 ? "/" : ""}`,
+        )}
+      </div>
+    ),
+  }),
   columnHelper.accessor("status", {
     header: ({ column }) => {
       return (
@@ -41,7 +63,7 @@ export const columns = [
       );
     },
   }),
-  columnHelper.accessor("album.title", {
+  columnHelper.accessor("Album.title", {
     id: "albumTitle",
     header: ({ column }) => {
       return (
@@ -55,9 +77,9 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      return row.original.album ? (
-        <Link href={`artist/albums/${row.original.album.title}`}>
-          <div className="w-full">{row.original.album.title}</div>
+      return row.original.Album ? (
+        <Link href={`artist/albums/${row.original.Album.title}`}>
+          <div className="w-full">{row.original.Album.title}</div>
         </Link>
       ) : null;
     },

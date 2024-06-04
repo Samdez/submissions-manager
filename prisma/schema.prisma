@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Album {
@@ -16,29 +17,51 @@ model Album {
 }
 
 model Artist {
-  id     Int     @id @default(autoincrement())
-  name   String
-  albums Album[]
-  tracks Track[]
+  id        Int     @id @default(autoincrement())
+  userName  String?
+  firstName String?
+  lastName  String?
+  email     String  @unique
+  albums    Album[]
+  tracks    Track[]
+  clerkId   String  @unique
+  Labels    Label[]
 }
 
 model LabelMember {
-  id      Int       @id @default(autoincrement())
-  name    String
-  Comment Comment[]
+  id        Int       @id @default(autoincrement())
+  email     String?   @unique
+  firstName String?
+  lastName  String?
+  userName  String?
+  Comment   Comment[]
+  clerkId   String    @unique
+  Label     Label?    @relation(fields: [labelId], references: [id])
+  labelId   Int?
+}
+
+model Label {
+  id       Int           @id @default(autoincrement())
+  name     String
+  Members  LabelMember[]
+  Tracks   Track[]
+  Artists  Artist?       @relation(fields: [artistId], references: [id])
+  artistId Int?
+  clerkId  String        @unique
 }
 
 model Track {
   id             Int         @id @default(autoincrement())
   title          String
   url            String
-  album          Album?      @relation(fields: [albumId], references: [id])
+  Album          Album?      @relation(fields: [albumId], references: [id])
   status         TrackStatus @default(PENDING)
   albumId        Int?
   Artist         Artist?     @relation(fields: [artistId], references: [id])
   artistId       Int?
   submissionDate String
   Comments       Comment[]
+  Labels         Label[]
 }
 
 model Comment {

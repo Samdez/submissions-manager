@@ -1,7 +1,9 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { createUser } from "@/prisma/queries";
+import { createLabel } from "@/prisma/queries/label";
+import { createArtist } from "@/prisma/queries/artist";
+import { createLabelMember } from "@/prisma/queries/labelMember";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
@@ -57,12 +59,29 @@ export async function POST(req: Request) {
         last_name,
         email_addresses: [{ email_address }],
       } = evt.data;
-      await createUser({
+      await createArtist({
         clerkId: id,
         userName: username || "",
         email: email_address,
         firstName: first_name || "",
         lastName: last_name || "",
+      });
+    }
+    if (evt.type === "organizationMembership.created") {
+      const {
+        organization: { id },
+        public_user_data: { user_id },
+      } = evt.data;
+      await createLabelMember({
+        labelMemberClerkId: user_id,
+        labelClerkId: id,
+      });
+    }
+    if (evt.type === "organization.created") {
+      const { id, name } = evt.data;
+      await createLabel({
+        clerkId: id,
+        name,
       });
     }
   } catch (error) {
