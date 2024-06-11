@@ -6,9 +6,9 @@ import {
   ClerkLoaded,
   ClerkLoading,
 } from "@clerk/nextjs";
-import { ModeToggle } from "./dark-mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
+import { ModeToggle } from "./Dark-mode-toggle";
 
 function NavBar() {
   return (

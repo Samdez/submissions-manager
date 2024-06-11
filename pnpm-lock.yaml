@@ -77,6 +77,12 @@ dependencies:
   zod:
     specifier: ^3.23.8
     version: 3.23.8
+  zsa:
+    specifier: ^0.3.4
+    version: 0.3.4
+  zsa-react:
+    specifier: ^0.1.4
+    version: 0.1.4
 
 devDependencies:
   '@types/node':
@@ -4024,7 +4030,6 @@ packages:
     resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -4251,4 +4256,20 @@ packages:
 
   /zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+    dev: false
+
+  /zsa-react@0.1.4:
+    resolution: {integrity: sha512-Te/rLTJfsKzrTPBUljn+5E2twE2FfrEfGnOkIefNe8Z41S0rDm9zVAWSwSP5yCIm5hYq+EYuW1ctkCUKvBOBqg==}
+    dependencies:
+      react: 18.3.1
+      typescript: 5.4.5
+      zod: 3.23.8
+      zsa: 0.3.4
+    dev: false
+
+  /zsa@0.3.4:
+    resolution: {integrity: sha512-HAcZnBF+fxzb8XWuwVXdNIHwj2pFqELIXoPFJtr09EfPqWjll+crhJ94izlkqkZ/ew+tiWu4XPaSdm0NK5YI8Q==}
+    dependencies:
+      typescript: 5.4.5
+      zod: 3.23.8
     dev: false

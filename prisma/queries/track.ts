@@ -5,14 +5,21 @@ export async function getTrack(
   trackId: number,
   visibility: "ALL" | "LABEL_MEMBERS",
 ) {
-  const track = await prisma.track.findFirst({
-    where: { id: trackId },
-    include: {
-      Album: true,
-      Comments: { include: { author: true }, where: { visibility } },
-    },
-  });
-  return track;
+  try {
+    const track = await prisma.track.findFirst({
+      where: { id: trackId },
+      include: {
+        Album: true,
+        Comments: { include: { author: true }, where: { visibility } },
+        Reviews: { include: { LabelMember: true } },
+      },
+    });
+    return track;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export async function getTracksByArtist(userId: string) {

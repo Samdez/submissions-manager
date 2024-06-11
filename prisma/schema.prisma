@@ -38,6 +38,7 @@ model LabelMember {
   clerkId   String    @unique
   Label     Label?    @relation(fields: [labelId], references: [id])
   labelId   Int?
+  Review    Review[]
 }
 
 model Label {
@@ -62,6 +63,17 @@ model Track {
   submissionDate String
   Comments       Comment[]
   Labels         Label[]
+  Reviews        Review[]
+}
+
+model Review {
+  LabelMember   LabelMember @relation(fields: [labelMemberId], references: [id])
+  labelMemberId Int
+  isApproved    Boolean
+  Track         Track       @relation(fields: [trackId], references: [id])
+  trackId       Int
+
+  @@id(name: "reviewId", [trackId, labelMemberId])
 }
 
 model Comment {
